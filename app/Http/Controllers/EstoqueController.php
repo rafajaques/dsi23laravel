@@ -11,6 +11,10 @@ class EstoqueController extends Controller
     public function index()
     {
         $lista = Estoque::orderBy('id', 'desc')->get();
+        // Se quiser mostrar os apagados também
+        // withTrashed()->
+        // Se quiser mostrar só os apagados
+        // onlyTrashed()->
 
         return view('estoque.index', [
             'lista' => $lista,
@@ -41,6 +45,19 @@ class EstoqueController extends Controller
     public function editar(Estoque $estoque) {
         return view('estoque.adicionar', [
             'editar' => $estoque,
+        ]);
+    }
+
+    public function apagar(Estoque $estoque) {
+        /* Se o método de acesso for DELETE, apaga
+        no banco. Senão, mostra a tela de confirmação */
+        if (request()->isMethod('DELETE')) {
+            $estoque->delete();
+            return redirect('estoque');
+        }
+
+        return view('estoque.apagar', [
+            'estoque' => $estoque,
         ]);
     }
 }
