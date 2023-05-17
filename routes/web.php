@@ -1,13 +1,14 @@
 <?php
 
 use App\Http\Controllers\EstoqueController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/estoque', [EstoqueController::class, 'index'])->name('estoque');
+Route::get('/estoque', [EstoqueController::class, 'index'])->name('estoque')->middleware('auth');
 
 Route::post('/estoque/busca', [EstoqueController::class, 'busca'])->name('estoque.busca');
 
@@ -23,6 +24,25 @@ Route::put('/estoque/adicionar', [EstoqueController::class, 'editarGravar']);
 Route::get('/estoque/apagar/{estoque}', [EstoqueController::class, 'apagar'])->name('estoque.apagar');
 
 Route::delete('/estoque/apagar/{estoque}', [EstoqueController::class, 'apagar']);
+
+// Grupo para rotas que comecem com /user
+Route::group(['prefix' => '/user'], function () {
+    
+    // Rota vazia = endereço raiz (apenas prefixo)
+    Route::get('', [UserController::class, 'index'])->name('user');
+
+    Route::get('/create', [UserController::class, 'create'])->name('user.create');
+
+    Route::post('/create', [UserController::class, 'createSave']);
+
+    Route::get('/login', [UserController::class, 'login'])->name('user.login');
+
+    // Neste exemplo específico, vou usar exatamente a mesma função na controller, para mostrar como é possível usar dois tipos de rota na mesma função
+    Route::post('/login', [UserController::class, 'login']);
+
+    Route::get('/logout', [UserController::class, 'logout'])->name('user.logout');
+
+});
 
 // Route::get('/teste', function() {
 //     return 'O teste funcionou';
