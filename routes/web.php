@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EstoqueController;
+use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,7 +28,7 @@ Route::delete('/estoque/apagar/{estoque}', [EstoqueController::class, 'apagar'])
 
 // Grupo para rotas que comecem com /user
 Route::group(['prefix' => '/user'], function () {
-    
+
     // Rota vazia = endereço raiz (apenas prefixo)
     Route::get('', [UserController::class, 'index'])->name('user');
 
@@ -43,6 +44,10 @@ Route::group(['prefix' => '/user'], function () {
     Route::get('/logout', [UserController::class, 'logout'])->name('user.logout');
 
 });
+
+Route::get('/upload', [UploadController::class, 'index'])->name('upload');
+
+Route::post('/upload/save', [UploadController::class, 'save'])->name('upload.save');
 
 // Route::get('/teste', function() {
 //     return 'O teste funcionou';
